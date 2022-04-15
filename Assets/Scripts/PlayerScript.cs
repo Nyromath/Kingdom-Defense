@@ -1,9 +1,11 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading;
 using UnityEngine;
 
 public class PlayerScript : MonoBehaviour
 {
+    //declaring variables
     CharacterController ThirdPersonController;
     Animator playerAnimator;
 
@@ -16,8 +18,15 @@ public class PlayerScript : MonoBehaviour
     [SerializeField] Transform cam;
     bool lockCursor = true;
 
+    //variables for melee combat hit detection
+    public Transform attackPoint;
+    public float attackRange = 0.5f;
+    public LayerMask enemyLayer;
+    public GameObject ui;
+
     void Start()
     {
+        //initializing variables
         ThirdPersonController = GetComponent<CharacterController>();
         playerAnimator = GetComponent<Animator>();
     }
@@ -30,6 +39,7 @@ public class PlayerScript : MonoBehaviour
         MouseState();
     }
 
+    //locks the cursor so it isn't visible while game is in play
     private void MouseState()
     {
         if (lockCursor)
@@ -43,6 +53,8 @@ public class PlayerScript : MonoBehaviour
             Cursor.visible = true;
         }
     }
+
+    //handles player movement using camera position and user inputs
     void MovementMethod()
     {
         HoriMove = Input.GetAxis("Horizontal");
@@ -65,9 +77,22 @@ public class PlayerScript : MonoBehaviour
         }
     }
 
+    //handles player attacks
     void AttackingMethod()
     {
         Attacking = Input.GetKeyDown("mouse 0");
         playerAnimator.SetBool("IsAttacking", Attacking);
+
+        if (Attacking)
+        {
+            Collider[] hitEnemies = Physics.OverlapSphere(attackPoint.position, attackRange, enemyLayer);
+
+            foreach(Collider enemy in hitEnemies)
+            {
+                //calls public methods in other scripts to trigger their function
+                enemy.GetComponent<GoblinScript>().Death();
+                ui.GetComponent<UIScript>().ChangeScore();
+            }
+        }
     }
 }

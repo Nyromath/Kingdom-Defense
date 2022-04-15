@@ -5,7 +5,6 @@ TagManager:
   serializedVersion: 2
   tags:
   - Interact
-  - GoblinAttack
   - PlayerAttack
   layers:
   - Default
@@ -14,7 +13,7 @@ TagManager:
   - 
   - Water
   - UI
-  - 
+  - Enemies
   - 
   - 
   - 

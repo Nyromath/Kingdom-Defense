@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class CameraScript : MonoBehaviour
 {
+    //declaring variables
     [SerializeField] Transform PlayerTransform;
     Transform CameraTransform;
 
@@ -16,12 +17,14 @@ public class CameraScript : MonoBehaviour
     float mouseY;
     void Start()
     {
+        //initializing variables
         CameraTransform = transform;
         CameraOffset = new Vector3(0, 2.0f, -2.0f);
     }
 
     void Update()
     {
+        //takes mouse input to move camera within its maximum range
         mouseX += Input.GetAxis("Mouse X");
         mouseY -= Input.GetAxis("Mouse Y");
         mouseY = Mathf.Clamp(mouseY, MouseMin, MouseMax);
@@ -33,6 +36,5 @@ public class CameraScript : MonoBehaviour
         CameraTransform.position = PlayerTransform.position + camRotation * CameraOffset;
         CameraLookat = new Vector3(PlayerTransform.position.x, PlayerTransform.position.y + CameraLookHeight, PlayerTransform.position.z);
         CameraTransform.LookAt(CameraLookat);
-        //PlayerTransform.rotation = Quaternion.Euler(0, mouseX, 0);
     }
 }
